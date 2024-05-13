@@ -1,25 +1,16 @@
-FROM openjdk:17-slim as build
-
+FROM khv9786/als_ide_jdk
 WORKDIR /app
+COPY ./data /app
+EXPOSE 8080
+CMD ["java", "-jar", "your-application.jar"]
 
-COPY . .
-
-RUN mkdir -p /root/.gradle
-RUN echo "systemProp.http.proxyHost=krmp-proxy.9rum.cc\nsystemProp.http.proxyPort=3128\nsystemProp.https.proxyHost=krmp-proxy.9rum.cc\nsystemProp.https.proxyPort=3128" > /root/.gradle/gradle.properties
-RUN chmod +x gradlew
-
-
-
-RUN ./gradlew build -x test
-
-# List output to verify
-RUN ls /app/build/libs/
-
-FROM openjdk:17-slim
-VOLUME /tmp
-COPY --from=build /app/build/libs/*.jar /app/
-
-
-
-ENTRYPOINT ["java","-jar","/app.jar"]
-EXPOSE 8080/tcp
+# Dockerfile for Database Service
+FROM mysql:latest
+COPY ./db/mysql/config/*.cnf /etc/mysql/conf.d/
+COPY ./db/mysql/init/*.sql /docker-entrypoint-initdb.d/
+ENV MYSQL_ROOT_PASSWORD=!db1234
+ENV MYSQL_DATABASE=als_ide_db
+ENV MYSQL_USER=user
+ENV MYSQL_PASSWORD=!als1234
+ENV TZ=Asia/Seoul
+EXPOSE 3306
