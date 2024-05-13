@@ -17,7 +17,7 @@ RUN ls /app/build/libs/
 
 FROM openjdk:17-slim
 VOLUME /tmp
-COPY --from=build /app/build/libs/*.jar app.jar
+COPY --from=build /app/build/libs/*.jar /app/
 
 
 
