@@ -12,14 +12,13 @@ RUN chmod +x gradlew
 
 RUN ./gradlew build -x test
 
+
 # List output to verify
 RUN ls /app/build/libs/
 
 FROM openjdk:17-slim
 VOLUME /tmp
-COPY --from=build /app/build/libs/*.jar /app/app.jar
+COPY --from=build /app/build/libs/*.jar /app/
 
-
-
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/boot.jar"]
 EXPOSE 8080/tcp
