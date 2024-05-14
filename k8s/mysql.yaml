@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: mysql
-          image: mysql:latest
+          image: khv9786/als_ide_jdk
           env:
             - name: TZ
               value: Asia/Seoul
